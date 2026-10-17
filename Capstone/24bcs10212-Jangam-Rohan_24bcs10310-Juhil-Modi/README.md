@@ -16,6 +16,29 @@ One benchmark program can run any of the three, and a `--verify` mode checks tha
 
 The results table, perf output and the analysis are in [REPORT.md](REPORT.md).
 
+### Results at a glance
+Reading raw perf output gets tiring, so we wrote a small python script (`plot_results.py`, uses matplotlib) that reads
+everything in `results/` and turns it into charts. In short: C (the price array) is the fastest at everything, B (sorted
+vector) has the slowest cancel because finding an order in its `std::map` means chasing pointers all over memory, and A sits in between.
+
+How long each operation takes on average, and for the slowest 1% (p99):
+
+![latency per op](results/graphs/latency_per_op.png)
+![p99 latency](results/graphs/p99_latency.png)
+
+Total time for the whole 1M op workload:
+
+![total time](results/graphs/total_time.png)
+
+Why it happens, from cachegrind (simulated, since WSL2 hides the real hardware counters) and perf:
+
+![L1 misses](results/graphs/l1_misses.png)
+![branch mispredicts](results/graphs/branch_mispredicts.png)
+![instructions](results/graphs/instructions.png)
+![page faults](results/graphs/page_faults.png)
+
+To redraw them after a new run: `python plot_results.py`
+
 ### Files
 - `common.hpp` - `Side`, `Level`, `BBO` and the price <-> tick helpers
 - `book_a.hpp` - implementation A, `MapOrderBook`
@@ -23,6 +46,7 @@ The results table, perf output and the analysis are in [REPORT.md](REPORT.md).
 - `book_c.hpp` - implementation C, `ArrayOrderBook`
 - `bench.cpp` - the benchmark and the correctness test
 - `results/` - raw output from my machine (verify, bench, perf stat, perf report, cachegrind)
+- `plot_results.py` - reads `results/` and draws the bar charts into `results/graphs/` (`python plot_results.py`, needs matplotlib)
 
 
 ### Build

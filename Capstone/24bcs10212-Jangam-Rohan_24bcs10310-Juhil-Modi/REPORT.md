@@ -53,6 +53,18 @@ Two notes on the timings:
 - p99 means 99% of ops were faster than this. It's counted in 10 ns buckets (a small histogram), so it's rounded up to the next 10 ns.
 
 
+## Graphs
+Made with `python plot_results.py`, which reads the files in `results/`.
+
+![latency per op](results/graphs/latency_per_op.png)
+![p99 latency](results/graphs/p99_latency.png)
+![total time](results/graphs/total_time.png)
+![L1 misses](results/graphs/l1_misses.png)
+![branch mispredicts](results/graphs/branch_mispredicts.png)
+![instructions](results/graphs/instructions.png)
+![page faults](results/graphs/page_faults.png)
+
+
 ## Raw output
 
 ### perf stat
